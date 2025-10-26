@@ -1,20 +1,19 @@
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const path = require('path')
 const fs = require('fs')
 
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 
-// simple list
+// ---------------------- simple list
 const universities = [
   { id: 'a', name:'Riverside Private University', location:'City X' },
   { id: 'b', name:'Hillcrest Global Institute', location:'City Y' }
 ]
 
-// nested sample data
+// ---------------------- nested sample data
 const details = {
   a: {
     id:'a',
@@ -34,9 +33,9 @@ const details = {
   }
 }
 
-const leadsFile = path.join(__dirname, 'leads.json')
+const leadsFile = './leads.json'
 
-// Load existing leads
+// ---------------- Load existing leads
 let leads = []
 try {
   if (fs.existsSync(leadsFile)) {
@@ -46,7 +45,7 @@ try {
   console.log('No existing leads file found')
 }
 
-// Save leads to file
+// -------------------- Save leads to file
 const saveLeads = () => {
   fs.writeFileSync(leadsFile, JSON.stringify(leads, null, 2))
 }
@@ -74,8 +73,7 @@ app.get('/api/leads', (req,res) => {
   return res.json({success:true,data:leads})
 })
 
-// serve static fees (if frontend requests /api/fees/*)
-app.use('/api/fees', express.static(path.join(__dirname, 'public', 'api', 'fees')))
+
 
 const port = process.env.PORT || 4000
 app.listen(port,()=>console.log('API running on',port))
